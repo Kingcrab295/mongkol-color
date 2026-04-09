@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>สีเสื้อมงคล · Lucky Color</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold:#C9A84C; --gold-light:#F0D98A; --gold-dim:#7A6330;
+  --ink:#1A1612; --paper:#FAF6EE; --paper-dark:#F0E8D8;
+  --muted:#8A7F6E; --card:#FFFDF7;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{font-size:16px;}
+body{background:var(--paper);color:var(--ink);font-family:'Sarabun',sans-serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(circle at 20% 20%,rgba(201,168,76,.07) 0%,transparent 55%),radial-gradient(circle at 80% 80%,rgba(201,168,76,.05) 0%,transparent 55%);pointer-events:none;z-index:0;}
+
+/* ── Layout ── */
+.wrap{max-width:430px;margin:0 auto;padding:0 16px 72px;position:relative;z-index:1;}
+
+/* ── Header ── */
+.header{text-align:center;padding:40px 0 28px;}
+.eyebrow{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;font-weight:500;}
+.header h1{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;line-height:1.18;}
+.header h1 em{font-style:italic;font-weight:400;color:var(--gold);}
+.header-sub{font-size:13px;color:var(--muted);line-height:1.6;margin-top:10px;}
+.divider{display:flex;align-items:center;gap:10px;margin:20px 0;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);}
+.divider span{color:var(--gold);font-size:12px;}
+
+/* ── Form card ── */
+.card{background:var(--card);border:1px solid rgba(201,168,76,.22);border-radius:20px;padding:22px 18px;margin-bottom:14px;}
+.flabel{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:7px;display:block;}
+.fsub{font-size:12px;color:var(--muted);margin-bottom:10px;display:block;line-height:1.5;}
+
+.date-row{display:grid;grid-template-columns:80px 1fr 1fr;gap:8px;margin-bottom:6px;}
+.sw{position:relative;}
+.sw::after{content:'▾';position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--gold);pointer-events:none;font-size:11px;}
+select{width:100%;padding:11px 28px 11px 12px;background:var(--paper);border:1px solid rgba(201,168,76,.3);border-radius:10px;font-family:'Sarabun',sans-serif;font-size:14px;color:var(--ink);appearance:none;-webkit-appearance:none;cursor:pointer;transition:border-color .2s,box-shadow .2s;}
+select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.1);}
+
+.wed-sec{display:none;margin-top:10px;}
+.wed-sec.show{display:block;}
+.wed-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:7px;}
+.wed-btn{padding:10px 6px;border:1px solid rgba(201,168,76,.3);border-radius:10px;background:var(--paper);cursor:pointer;font-family:'Sarabun',sans-serif;font-size:13px;color:var(--muted);text-align:center;transition:all .2s;line-height:1.4;}
+.wed-btn.on{border-color:var(--gold);background:rgba(201,168,76,.1);color:var(--gold-dim);font-weight:500;}
+
+/* ── Blessing grid ── */
+.bless-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+.bb{padding:11px 6px;border:1.5px solid rgba(201,168,76,.25);border-radius:14px;background:var(--paper);cursor:pointer;transition:all .2s;text-align:center;font-family:'Sarabun',sans-serif;user-select:none;}
+.bb .bi{font-size:20px;display:block;margin-bottom:3px;line-height:1.3;}
+.bb .bt{font-size:12px;font-weight:500;color:var(--ink);display:block;line-height:1.3;}
+.bb .be{font-size:10px;color:var(--muted);display:block;margin-top:1px;}
+.bb:active{transform:scale(.97);}
+.bb.on{border-color:var(--gold);background:rgba(201,168,76,.1);box-shadow:0 0 0 2px rgba(201,168,76,.18);}
+.bb.on .bt{color:var(--gold-dim);}
+.span2{grid-column:span 2;}
+
+.err{color:#B04030;font-size:12px;margin-top:7px;display:none;}
+.err.show{display:block;}
+
+.cta{width:100%;padding:15px;background:var(--gold);color:var(--ink);border:none;border-radius:14px;font-family:'Sarabun',sans-serif;font-size:16px;font-weight:600;cursor:pointer;transition:all .2s;margin-top:10px;letter-spacing:.02em;}
+.cta:active{transform:scale(.98);}
+.cta:hover{background:var(--gold-light);}
+
+/* ── RESULT ── */
+.result{display:none;}
+.result.show{display:block;animation:up .45s ease forwards;}
+@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* Top bar with back + blessing switcher */
+.result-topbar{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:0 2px;}
+.back-btn{display:flex;align-items:center;gap:5px;padding:8px 14px;border:1px solid rgba(201,168,76,.35);border-radius:24px;background:var(--card);cursor:pointer;font-family:'Sarabun',sans-serif;font-size:13px;color:var(--muted);transition:all .2s;white-space:nowrap;flex-shrink:0;}
+.back-btn:active{transform:scale(.97);}
+.back-btn:hover{border-color:var(--gold);color:var(--ink);}
+.bless-chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch;}
+.bless-chips::-webkit-scrollbar{display:none;}
+.chip{padding:7px 12px;border:1px solid rgba(201,168,76,.28);border-radius:20px;background:var(--card);cursor:pointer;font-family:'Sarabun',sans-serif;font-size:12px;color:var(--muted);white-space:nowrap;transition:all .18s;flex-shrink:0;}
+.chip.on{background:var(--gold);color:var(--ink);border-color:var(--gold);font-weight:600;}
+.chip:active{transform:scale(.96);}
+
+/* ── PERSONAL COLOR — HERO ── */
+.hero-card{border-radius:24px;overflow:hidden;margin-bottom:12px;}
+
+/* Badge row — sits at top, clear of orb */
+.hero-top{display:flex;justify-content:center;padding:20px 16px 0;transition:background .5s;}
+.hero-badge{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.32);border-radius:20px;padding:5px 14px;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.92);white-space:nowrap;}
+
+/* Orb zone — purely the circle, centred, breathing room top & bottom */
+.hero-orb-zone{display:flex;justify-content:center;align-items:center;padding:24px 0 20px;transition:background .5s;}
+.hero-orb{width:128px;height:128px;border-radius:50%;border:4px solid rgba(255,255,255,.45);box-shadow:0 0 0 14px rgba(255,255,255,.1),0 14px 44px rgba(0,0,0,.22);transition:background .5s;flex-shrink:0;}
+
+/* Name zone — sits below orb, separate background section */
+.hero-name-zone{padding:20px 20px 22px;text-align:center;transition:background .5s;}
+.hero-name{font-family:'Playfair Display',serif;font-size:46px;font-weight:700;color:#fff;text-shadow:0 2px 16px rgba(0,0,0,.25);line-height:1;display:block;}
+.hero-name-en{font-size:13px;color:rgba(255,255,255,.65);margin-top:6px;letter-spacing:.08em;display:block;}
+
+/* Dark body */
+.hero-body{background:var(--ink);padding:20px;}
+.hero-meaning{font-size:14px;line-height:1.75;color:rgba(255,255,255,.9);}
+.hero-meaning-en{font-size:12px;color:rgba(255,255,255,.48);line-height:1.6;margin-top:5px;}
+.hero-secondaries{display:flex;gap:8px;align-items:center;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.1);flex-wrap:wrap;}
+.sec-label{font-size:10px;color:rgba(255,255,255,.38);letter-spacing:.1em;text-transform:uppercase;flex-shrink:0;}
+.sec-dot{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.22);flex-shrink:0;}
+.sec-name{font-size:11px;color:rgba(255,255,255,.58);}
+.born-strip{background:rgba(255,255,255,.05);padding:10px 20px;font-size:11px;color:rgba(255,255,255,.4);border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:6px;}
+
+/* กาลกิณี warning inside hero body */
+.kalikini-warn{background:rgba(220,80,60,.18);border:1px solid rgba(220,80,60,.35);border-radius:10px;padding:10px 13px;margin-top:14px;font-size:12px;color:#FFB3A8;line-height:1.6;}
+.kalikini-warn strong{color:#FF8878;}
+
+/* Conflict note */
+.conflict{margin:0 0 12px;background:rgba(201,168,76,.12);border-radius:12px;padding:10px 14px;font-size:12px;color:var(--gold-dim);line-height:1.6;border-left:3px solid var(--gold);}
+
+/* ── TODAY — toned down ── */
+.today-card{background:var(--card);border:1px solid rgba(201,168,76,.18);border-radius:16px;overflow:hidden;margin-bottom:12px;}
+.today-header{padding:10px 14px;background:rgba(201,168,76,.07);border-bottom:1px solid rgba(201,168,76,.12);display:flex;align-items:center;gap:8px;}
+.today-tag{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-dim);background:rgba(201,168,76,.15);padding:3px 9px;border-radius:12px;}
+.today-subtitle{font-size:12px;color:var(--muted);}
+.today-body{padding:14px;}
+.today-colors{display:flex;gap:10px;align-items:flex-end;margin-bottom:12px;}
+.tc-pill{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.tc-dot{border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.12);}
+.tc-dot.main{width:44px;height:44px;}
+.tc-dot.sub{width:30px;height:30px;opacity:.8;}
+.tc-name{font-size:11px;color:var(--ink);font-weight:500;}
+.tc-tag{font-size:9px;padding:1px 6px;border-radius:8px;}
+.tc-primary{background:var(--gold);color:var(--ink);font-weight:600;}
+.tc-secondary{background:var(--paper-dark);color:var(--muted);}
+.today-text{font-size:13px;line-height:1.65;color:var(--ink);}
+.today-text-en{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.5;}
+.avoid-row{display:flex;align-items:center;gap:8px;padding:9px 14px;background:rgba(180,60,50,.05);border-top:1px solid rgba(180,60,50,.1);}
+.avoid-dot{width:22px;height:22px;border-radius:50%;flex-shrink:0;border:2px solid rgba(180,60,50,.25);}
+.avoid-label{font-size:11px;color:#8A2A1A;line-height:1.4;}
+
+/* ── Actions ── */
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.act-btn{padding:13px;border:1px solid rgba(201,168,76,.32);border-radius:12px;background:var(--card);cursor:pointer;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:500;color:var(--ink);display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s;}
+.act-btn:hover{background:rgba(201,168,76,.08);border-color:var(--gold);}
+.act-btn:active{transform:scale(.97);}
+
+/* ── Premium ── */
+.premium{background:linear-gradient(135deg,#1A1612,#2C2418);border:1px solid rgba(201,168,76,.38);border-radius:20px;padding:20px;text-align:center;margin-top:14px;}
+.p-eye{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:7px;}
+.p-title{font-family:'Playfair Display',serif;font-size:19px;color:#FAF6EE;margin-bottom:7px;}
+.p-desc{font-size:12px;color:rgba(250,246,238,.55);line-height:1.6;margin-bottom:14px;}
+.p-feats{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;text-align:left;}
+.p-feat{font-size:12px;color:rgba(250,246,238,.72);display:flex;gap:7px;line-height:1.4;}
+.p-dot{color:var(--gold);flex-shrink:0;}
+.p-btn{width:100%;padding:13px;background:var(--gold);color:var(--ink);border:none;border-radius:12px;font-family:'Sarabun',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;}
+.p-btn:hover{background:var(--gold-light);}
+.p-price{font-size:10px;color:rgba(250,246,238,.35);margin-top:7px;}
+
+.footer{text-align:center;padding-top:32px;font-size:11px;color:var(--muted);line-height:1.9;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="eyebrow">✦ สีเสื้อมงคล · Lucky Color ✦</div>
+    <h1>สี<em>มงคล</em><br>ของคุณวันนี้</h1>
+    <p class="header-sub">สีมงคลส่วนตัวจากวันเกิด + สีมงคลประจำวันนี้<br>Your personal birth color · Today's universal color</p>
+  </div>
+  <div class="divider"><span>✦</span></div>
+
+  <!-- FORM -->
+  <div id="form-wrap">
+    <div class="card">
+      <label class="flabel">วันเกิด · Date of Birth</label>
+      <span class="fsub">วัน / เดือน / ปี เกิด</span>
+      <div class="date-row">
+        <div class="sw"><select id="bday"><option value="">วัน</option></select></div>
+        <div class="sw"><select id="bmonth">
+          <option value="">เดือน</option>
+          <option value="1">ม.ค.</option><option value="2">ก.พ.</option><option value="3">มี.ค.</option>
+          <option value="4">เม.ย.</option><option value="5">พ.ค.</option><option value="6">มิ.ย.</option>
+          <option value="7">ก.ค.</option><option value="8">ส.ค.</option><option value="9">ก.ย.</option>
+          <option value="10">ต.ค.</option><option value="11">พ.ย.</option><option value="12">ธ.ค.</option>
+        </select></div>
+        <div class="sw"><select id="byear"><option value="">ปี</option></select></div>
+      </div>
+      <div class="wed-sec" id="wed-sec">
+        <span class="fsub" style="margin-top:6px;">⚠ เกิดวันพุธ — ระบุช่วงเวลาเกิด / Wednesday birth — specify time:</span>
+        <div class="wed-grid">
+          <button class="wed-btn" id="wday" onclick="setWed('day')">🌞 พุธกลางวัน<br><small>ก่อน 18:00</small></button>
+          <button class="wed-btn" id="wnight" onclick="setWed('night')">🌙 พุธกลางคืน<br><small>หลัง 18:00</small></button>
+        </div>
+      </div>
+
+      <div style="margin-top:18px;">
+        <label class="flabel">ขอพร · Seek Blessing</label>
+        <span class="fsub">เลือกสิ่งที่ต้องการเสริมดวงวันนี้</span>
+        <div class="bless-grid">
+          <button class="bb" data-b="career"><span class="bi">💼</span><span class="bt">การงาน</span><span class="be">Work / Career</span></button>
+          <button class="bb" data-b="money"><span class="bi">💰</span><span class="bt">การเงิน / โชคลาภ</span><span class="be">Money / Luck</span></button>
+          <button class="bb" data-b="love"><span class="bi">🌸</span><span class="bt">ความรัก</span><span class="be">Love</span></button>
+          <button class="bb" data-b="senior"><span class="bi">🙏</span><span class="bt">การสนับสนุนจากผู้ใหญ่</span><span class="be">Senior Support</span></button>
+          <button class="bb" data-b="social"><span class="bi">✨</span><span class="bt">บริวาร / เมตตา</span><span class="be">Charm / Popularity</span></button>
+          <button class="bb" data-b="health"><span class="bi">🌿</span><span class="bt">สุขภาพ</span><span class="be">Health</span></button>
+          <button class="bb span2" data-b="protection"><span class="bi">🛡️</span><span class="bt">คุ้มครอง / ป้องกันสิ่งร้าย</span><span class="be">Protection</span></button>
+        </div>
+      </div>
+      <div class="err" id="err">⚠ กรุณากรอกวันเกิดและเลือกสิ่งที่ต้องการ</div>
+      <button class="cta" onclick="generate()">✦ ดูสีมงคลของฉัน · Find My Color</button>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="result" id="result-wrap">
+
+    <!-- Top bar: back + blessing chips -->
+    <div class="result-topbar">
+      <button class="back-btn" onclick="goBack()">← กลับ</button>
+      <div class="bless-chips" id="bless-chips"></div>
+    </div>
+
+    <!-- PERSONAL HERO -->
+    <div class="hero-card" id="hero-card">
+      <!-- Zone 1: Badge -->
+      <div class="hero-top" id="hero-top">
+        <div class="hero-badge" id="hero-badge">⭐ สีมงคลของคุณ</div>
+      </div>
+      <!-- Zone 2: Orb only -->
+      <div class="hero-orb-zone" id="hero-orb-zone">
+        <div class="hero-orb" id="hero-orb"></div>
+      </div>
+      <!-- Zone 3: Name only -->
+      <div class="hero-name-zone" id="hero-name-zone">
+        <span class="hero-name" id="hero-name"></span>
+        <span class="hero-name-en" id="hero-name-en"></span>
+      </div>
+      <!-- Dark body -->
+      <div class="hero-body">
+        <div class="hero-meaning" id="hero-meaning"></div>
+        <div class="hero-meaning-en" id="hero-meaning-en"></div>
+        <div id="kalikini-wrap"></div>
+        <div class="hero-secondaries" id="hero-secondaries"></div>
+      </div>
+      <div class="born-strip" id="born-strip">📅 —</div>
+    </div>
+
+    <div class="conflict" id="conflict-note" style="display:none;"></div>
+
+    <!-- TODAY — toned down -->
+    <div class="today-card">
+      <div class="today-header">
+        <span class="today-tag">🌍 วันนี้ · Today</span>
+        <span class="today-subtitle" id="today-subtitle"></span>
+      </div>
+      <div class="today-body">
+        <div class="today-colors" id="today-colors"></div>
+        <div class="today-text" id="today-text"></div>
+        <div class="today-text-en" id="today-text-en"></div>
+      </div>
+      <div class="avoid-row">
+        <div class="avoid-dot" id="avoid-dot"></div>
+        <div class="avoid-label" id="avoid-label"></div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions">
+      <button class="act-btn" onclick="doCopy()">📋 คัดลอก</button>
+      <button class="act-btn" onclick="doShare()">🔗 แชร์</button>
+    </div>
+    <button class="act-btn" id="save-btn" onclick="saveImage()" style="width:100%;margin-bottom:12px;">
+      🖼️ บันทึกรูปภาพ · Save Image
+    </button>
+    <canvas id="share-canvas" style="display:none;"></canvas>
+
+    <!-- Premium -->
+    <div class="premium">
+      <div class="p-eye">✦ Premium ✦</div>
+      <div class="p-title">เสริมดวงเฉพาะโอกาส</div>
+      <div class="p-desc">สีมงคลและฤกษ์ดีสำหรับวันสำคัญของคุณโดยเฉพาะ</div>
+      <div class="p-feats">
+        <div class="p-feat"><span class="p-dot">✦</span><span>สีมงคลวันสัมภาษณ์ / ออกเดท / สอบ / หวย</span></div>
+        <div class="p-feat"><span class="p-dot">✦</span><span>ฤกษ์มงคลและสิ่งที่ควรทำในวันนั้น</span></div>
+        <div class="p-feat"><span class="p-dot">✦</span><span>สีต้องห้าม 3 สีห้ามใส่เด็ดขาด</span></div>
+        <div class="p-feat"><span class="p-dot">✦</span><span>การ์ดมงคลส่วนตัว แชร์ได้ทุก platform</span></div>
+      </div>
+      <button class="p-btn" onclick="showPremium()">🌟 ดูรายละเอียด · ฿39</button>
+      <div class="p-price">ชำระครั้งเดียว via PromptPay</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    สีเสื้อมงคล · Lucky Color Generator<br>
+    อ้างอิงตารางสีมงคลประจำวันเกิดแบบไทยดั้งเดิม<br>
+    <span style="opacity:.5">ความเชื่อส่วนบุคคล · For personal belief &amp; fun ✦</span>
+  </div>
+</div>
+
+<script>
+// ── Populate dropdowns ─────────────────────────
+const bd=document.getElementById('bday');
+for(let i=1;i<=31;i++){const o=document.createElement('option');o.value=i;o.textContent=i;bd.appendChild(o);}
+const by=document.getElementById('byear');
+const cy=new Date().getFullYear();
+for(let i=cy;i>=1940;i--){const o=document.createElement('option');o.value=i;o.textContent=i+' / '+(i+543);by.appendChild(o);}
+
+['bday','bmonth','byear'].forEach(id=>document.getElementById(id).addEventListener('change',chkWed));
+
+let wed=null, blessing=null, birthKey=null, todayDow=null;
+
+function chkWed(){
+  const d=+document.getElementById('bday').value,m=+document.getElementById('bmonth').value,y=+document.getElementById('byear').value;
+  if(!d||!m||!y)return;
+  const ws=document.getElementById('wed-sec');
+  if(new Date(y,m-1,d).getDay()===3){ws.classList.add('show');}
+  else{ws.classList.remove('show');wed=null;document.querySelectorAll('.wed-btn').forEach(b=>b.classList.remove('on'));}
+}
+
+function setWed(v){
+  wed=v;
+  document.getElementById('wday').classList.toggle('on',v==='day');
+  document.getElementById('wnight').classList.toggle('on',v==='night');
+}
+
+document.querySelectorAll('.bb').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.bb').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    blessing=b.dataset.b;
+  });
+});
+
+// ── COLOR HEX ─────────────────────────────────
+const HX={
+  'ชมพู':'#F4A0B4','ฟ้า':'#6AB4E8','เขียว':'#4CAF7D','แดง':'#D94040',
+  'ส้ม':'#E8873A','เหลือง':'#D4AC0D','ม่วง':'#8A5CC8','ขาว':'#E8E4DC',
+  'ดำ':'#2C2C2C','น้ำเงิน':'#2858A8','เทา':'#8A8A8A','น้ำตาล':'#8A5C38',
+  'ครีม':'#F0E8C8','ทอง':'#C9A84C','ม่วงอ่อน':'#B89AD4','เขียวเข้ม':'#2E7D4F','ส้มแดง':'#D4602A'
+};
+
+// ── BIRTH DAY MATRIX ───────────────────────────
+// 0=Sun,1=Mon,2=Tue,3=WedDay,4=WedNight,5=Thu,6=Fri,7=Sat
+const BIRTH={
+  1:{health:{c:['ชมพู','ฟ้า'],th:'เสริมสุขภาพ ความสดชื่น และการฟื้นฟูร่างกาย',en:'Promotes healing, freshness, and body recovery.'},
+     money:{c:['ม่วง','น้ำเงิน'],th:'เสริมโชคลาภและความมั่งคั่งทางการเงิน',en:'Attracts wealth and financial stability.'},
+     love:{c:['น้ำเงิน','ม่วง'],th:'เสริมความจริงใจและความลึกซึ้งในความรัก',en:'Deepens emotional sincerity and lasting bonds.'},
+     senior:{c:['ฟ้า','ครีม'],th:'ทำให้ผู้ใหญ่เมตตาและให้การสนับสนุน',en:'Earns warmth and support from senior figures.'},
+     social:{c:['ชมพู','ครีม'],th:'เสริมเสน่ห์ ทำให้เป็นที่รักของคนรอบข้าง',en:'Enhances charm and social likability.'},
+     career:{c:['เขียว','ส้ม'],th:'เสริมความก้าวหน้าและความสำเร็จในการงาน',en:'Promotes career growth and professional success.'},
+     protection:{c:['น้ำเงิน','ดำ'],th:'ป้องกันสิ่งชั่วร้ายและพลังงานลบ',en:'Shields against negative forces and harmful people.'},
+     avoid:{th:'แดง',en:'Red',hex:'#D94040'}},
+  2:{health:{c:['เขียว'],th:'เสริมพลังชีวิตและภูมิต้านทาน',en:'Strengthens immunity and vital energy.'},
+     money:{c:['ส้ม','น้ำตาล'],th:'เสริมรายได้และโชคค้าขาย',en:'Boosts income and trading fortune.'},
+     love:{c:['แดง','ส้ม'],th:'เสริมความหลงใหลและความโรแมนติก',en:'Ignites passion and deep romantic attraction.'},
+     senior:{c:['ชมพู'],th:'ทำให้ผู้ใหญ่รู้สึกอบอุ่นและเมตตา',en:'Warms the hearts of seniors toward you.'},
+     social:{c:['ส้ม','ชมพู'],th:'เสริมความสนุกสนานและเสน่ห์ดึงดูด',en:'Makes you lively, fun, and magnetically charming.'},
+     career:{c:['แดง','ม่วง'],th:'เสริมความกล้าและความเป็นผู้นำ',en:'Boosts boldness and leadership presence.'},
+     protection:{c:['ดำ','แดง'],th:'ป้องกันคุณไสยและคนอิจฉา',en:'Powerful shield against black magic and envy.'},
+     avoid:{th:'เหลือง',en:'Yellow',hex:'#D4AC0D'}},
+  3:{health:{c:['ม่วง','ฟ้า'],th:'เสริมสุขภาพจิตและความสงบภายใน',en:'Calms the mind and supports mental wellbeing.'},
+     money:{c:['ดำ','น้ำตาล'],th:'เสริมความมั่นคงและการสะสมทรัพย์',en:'Builds stable, lasting wealth.'},
+     love:{c:['ดำ','ม่วงอ่อน'],th:'เสริมความลึกลับและแรงดึงดูดใจ',en:'Adds mystery and deep magnetic attraction.'},
+     senior:{c:['ม่วง','ครีม'],th:'ทำให้ผู้ใหญ่ประทับใจและเคารพ',en:'Commands respect and admiration from seniors.'},
+     social:{c:['เขียว','ม่วงอ่อน'],th:'เสริมบุคลิกโดดเด่นและน่าดึงดูด',en:'Distinctive personal charm that draws people in.'},
+     career:{c:['ส้ม','แดง'],th:'เสริมความคิดสร้างสรรค์และการลงมือทำ',en:'Sparks creativity and decisive action at work.'},
+     protection:{c:['ดำ','ม่วง'],th:'ป้องกันสิ่งชั่วร้ายและพลังงานลบทุกชนิด',en:'Comprehensive protection against all negative forces.'},
+     avoid:{th:'แดง',en:'Red',hex:'#D94040'}},
+  4:{health:{c:['น้ำเงิน','ม่วง'],th:'เสริมความแข็งแกร่งและพลังงานสูง',en:'Strengthens physical power and high energy.'},
+     money:{c:['เหลือง','ครีม'],th:'เสริมโชคลาภอย่างต่อเนื่องและสม่ำเสมอ',en:'Brings consistent, flowing financial luck.'},
+     love:{c:['เทา','ม่วงอ่อน'],th:'เสริมความสงบและความเข้าใจกันในความรัก',en:'Brings calm understanding and emotional maturity.'},
+     senior:{c:['ม่วง'],th:'ทำให้ผู้ใหญ่ยอมรับและไว้วางใจ',en:'Earns trust and recognition from authority figures.'},
+     social:{c:['ฟ้า','เทา'],th:'เสริมภาพลักษณ์ที่น่าเชื่อถือและมีเสน่ห์',en:'Projects trustworthy, calm, attractive energy.'},
+     career:{c:['แดง','ม่วง'],th:'เสริมพลังงานและความมุ่งมั่นในการทำงาน',en:'Drives ambition and unstoppable work energy.'},
+     protection:{c:['น้ำเงิน','ดำ'],th:'คุ้มครองจากอุบัติเหตุและคนร้าย',en:'Protects against accidents and dangerous people.'},
+     avoid:{th:'แดง',en:'Red',hex:'#D94040'}},
+  5:{health:{c:['ดำ','น้ำเงิน'],th:'เสริมพลังและความอดทนของร่างกาย',en:'Builds physical endurance and strength.'},
+     money:{c:['แดง','ส้ม'],th:'เสริมโชคลาภและรายได้พิเศษ',en:'Attracts extra income and financial windfalls.'},
+     love:{c:['แดง','ส้ม'],th:'เสริมความหลงใหลและความตื่นเต้นในความรัก',en:'Brings excitement and passionate energy to romance.'},
+     senior:{c:['เขียว','น้ำเงิน'],th:'ทำให้ผู้ใหญ่ชื่นชมและให้โอกาส',en:'Earns admiration and career opportunities from seniors.'},
+     social:{c:['ส้มแดง','เหลือง'],th:'เสริมความสนุกและความเป็นศูนย์กลางกลุ่ม',en:'Makes you the energetic center of any group.'},
+     career:{c:['น้ำเงิน','เขียว'],th:'เสริมสติปัญญาและการตัดสินใจที่ดี',en:'Sharpens wisdom and sound decision-making at work.'},
+     protection:{c:['น้ำเงิน','ดำ'],th:'คุ้มครองจากสิ่งชั่วร้ายและเหตุร้าย',en:'Strong protective barrier against misfortune.'},
+     avoid:{th:'ม่วง',en:'Purple',hex:'#8A5CC8'}},
+  6:{health:{c:['ฟ้า','ขาว'],th:'เสริมสุขภาพและความสงบจิตใจ',en:'Calms the mind and promotes inner peace.'},
+     money:{c:['ฟ้า','ขาว'],th:'เสริมการไหลเวียนของโชคและเงินทอง',en:'Promotes smooth and continuous flow of money.'},
+     love:{c:['ฟ้า','ชมพู'],th:'วันศุกร์เป็นวันแห่งความรัก เสริมเสน่ห์อย่างแรง',en:'Friday is the day of love — powerful romantic energy.'},
+     senior:{c:['ขาว','ฟ้า'],th:'ทำให้ดูน่าเชื่อถือและผู้ใหญ่ชอบ',en:'Projects purity and trustworthiness to authority figures.'},
+     social:{c:['ชมพู','ฟ้า'],th:'เสริมเสน่ห์รอบด้าน ทำให้เป็นที่รักของทุกคน',en:'All-round charm boost — warm and naturally lovable.'},
+     career:{c:['ม่วงอ่อน','เหลือง'],th:'เสริมความคิดสร้างสรรค์และการสื่อสารที่ดี',en:'Enhances creative thinking and clear communication.'},
+     protection:{c:['ขาว','ฟ้า'],th:'ปกป้องด้วยพลังบริสุทธิ์ สลายพลังลบทุกอย่าง',en:'Pure white energy dissolves all negativity.'},
+     avoid:{th:'แดง',en:'Red',hex:'#D94040'}},
+  7:{health:{c:['เหลือง','ทอง'],th:'เสริมสุขภาพและความรุ่งเรืองของร่างกาย',en:'Golden energy brings radiant health and vitality.'},
+     money:{c:['ม่วง','น้ำเงิน'],th:'เสริมความมั่งคั่งและบารมีทางการเงิน',en:'Builds wealth, prestige, and financial authority.'},
+     love:{c:['ม่วง','ชมพู'],th:'เสริมความลึกซึ้งและความจริงใจในความรัก',en:'Deepens emotional sincerity and romantic bonds.'},
+     senior:{c:['ม่วง','ดำ'],th:'เสริมบารมีและทำให้ผู้ใหญ่ยอมรับ',en:'Projects authority and earns senior respect.'},
+     social:{c:['ม่วงอ่อน','ชมพู'],th:'เสริมเสน่ห์ที่ละเอียดอ่อนและน่าดึงดูด',en:'Subtle, refined charm that quietly draws people in.'},
+     career:{c:['น้ำเงิน','ม่วง'],th:'เสริมสถานะและความก้าวหน้าในหน้าที่',en:'Builds status and steady career advancement.'},
+     protection:{c:['ดำ','ม่วง'],th:'วันเสาร์ ดำคุ้มครองสูงสุด ป้องกันทุกสิ่งร้าย',en:'Saturday\'s strongest shield — black blocks all evil.'},
+     avoid:{th:'เขียว',en:'Green',hex:'#4CAF7D'}},
+  0:{health:{c:['ขาว','เหลือง'],th:'เสริมสุขภาพและความผ่องใส',en:'Brightens health and brings radiant wellbeing.'},
+     money:{c:['ดำ','น้ำเงิน'],th:'เสริมความมั่นคงและทรัพย์สะสม',en:'Builds solid, lasting financial foundations.'},
+     love:{c:['แดง','ดำ'],th:'เสริมความหลงใหลและเสน่ห์ทรงพลัง',en:'Powerful magnetic attraction and passionate romance.'},
+     senior:{c:['เทา','ทอง'],th:'ทำให้ผู้ใหญ่ประทับใจและเมตตาเอ็นดู',en:'Impresses seniors and earns their warm support.'},
+     social:{c:['ม่วง','ชมพู'],th:'เสริมความมีเสน่ห์และเป็นที่สนใจ',en:'Magnetic personality — you become the center of attention.'},
+     career:{c:['ม่วง','ชมพู'],th:'เสริมอำนาจและความเป็นผู้นำ',en:'Enhances authority and leadership at work.'},
+     protection:{c:['น้ำตาล','ดำ'],th:'ปกป้องจากสิ่งไม่ดีและให้ความมั่นคง',en:'Grounds and protects against instability and evil.'},
+     avoid:{th:'เหลือง',en:'Yellow',hex:'#D4AC0D'}}
+};
+
+// ── TODAY COLORS ───────────────────────────────
+const TODAY={
+  0:{career:{c:['ม่วง','ชมพู'],th:'วันอาทิตย์ — ม่วงเสริมอำนาจและความเป็นผู้นำ',en:'Sunday — purple builds authority and leadership.'},
+     money:{c:['ดำ','น้ำเงิน'],th:'วันอาทิตย์ — ดำและน้ำเงินดึงดูดโชคและความมั่งคั่ง',en:'Sunday — black and navy attract wealth energy.'},
+     love:{c:['แดง','ชมพู'],th:'วันอาทิตย์ — แดงเสริมเสน่ห์และความหลงใหล',en:'Sunday — red ignites passion and romantic attraction.'},
+     senior:{c:['เทา','ทอง'],th:'วันอาทิตย์ — สีสุขุมแสดงความน่าเคารพ',en:'Sunday — dignified tones earn senior respect.'},
+     social:{c:['ม่วง','ชมพู'],th:'วันอาทิตย์ — ม่วงเสริมเมตตาและเสน่ห์',en:'Sunday — purple enhances charm and social magnetism.'},
+     health:{c:['ขาว','เหลือง'],th:'วันอาทิตย์ — ขาวเสริมความบริสุทธิ์และสุขภาพ',en:'Sunday — white brings purity and refreshes health.'},
+     protection:{c:['น้ำตาล','ดำ'],th:'วันอาทิตย์ — ให้ความมั่นคงและปลอดภัย',en:'Sunday — grounded protection against bad energy.'},
+     avoid:{th:'เหลือง',en:'Yellow',hex:'#D4AC0D'}},
+  1:{career:{c:['เหลือง','เขียว'],th:'วันจันทร์ — เหลืองเสริมความก้าวหน้าและโชค',en:'Monday — yellow promotes growth and good fortune.'},
+     money:{c:['เหลือง','ครีม'],th:'วันจันทร์ — เหลืองทองเรียกโชคและเงินทอง',en:'Monday — golden yellow calls in luck and money.'},
+     love:{c:['ขาว','ชมพู'],th:'วันจันทร์ — ขาวเสริมความบริสุทธิ์ใจในความรัก',en:'Monday — white brings purity and sincerity to love.'},
+     senior:{c:['เหลือง','ขาว'],th:'วันจันทร์ — สีสุภาพทำให้ผู้ใหญ่ประทับใจ',en:'Monday — gentle colors earn senior admiration.'},
+     social:{c:['เหลือง','ขาว'],th:'วันจันทร์ — สีสว่างทำให้คนรอบข้างรู้สึกดี',en:'Monday — bright energy makes you warm and approachable.'},
+     health:{c:['ขาว','เหลือง'],th:'วันจันทร์ — ขาวเสริมความสะอาดและสุขภาพจิต',en:'Monday — white clears the mind and supports wellbeing.'},
+     protection:{c:['ขาว','เหลือง'],th:'วันจันทร์ — ขาวบริสุทธิ์ป้องกันสิ่งชั่วร้าย',en:'Monday — pure white dissolves bad energy.'},
+     avoid:{th:'แดง',en:'Red',hex:'#D94040'}},
+  2:{career:{c:['แดง','ส้ม'],th:'วันอังคาร — แดงเสริมพลังและความกล้าตัดสินใจ',en:'Tuesday — red drives energy and decisive action.'},
+     money:{c:['ส้ม','แดง'],th:'วันอังคาร — ส้มแดงเสริมความกล้าในการลงทุน',en:'Tuesday — bold colors give courage in financial decisions.'},
+     love:{c:['แดง','ชมพู'],th:'วันอังคาร — แดงเผาไหม้ด้วยความหลงใหล',en:'Tuesday — red burns with passionate romantic energy.'},
+     senior:{c:['ชมพู','ส้ม'],th:'วันอังคาร — ชมพูอบอุ่นทำให้ผู้ใหญ่รู้สึกดี',en:'Tuesday — warm pink earns warmth from seniors.'},
+     social:{c:['ส้ม','แดง'],th:'วันอังคาร — สีสดทำให้เป็นศูนย์กลางความสนใจ',en:'Tuesday — vibrant colors make you energetically visible.'},
+     health:{c:['ส้ม','แดง'],th:'วันอังคาร — ส้มและแดงเสริมพลังชีวิต',en:'Tuesday — orange and red boost vital life force.'},
+     protection:{c:['แดง','ดำ'],th:'วันอังคาร — แดงดำขับไล่สิ่งชั่วร้าย',en:'Tuesday — red and black repel evil and bad intentions.'},
+     avoid:{th:'เหลือง',en:'Yellow',hex:'#D4AC0D'}},
+  3:{career:{c:['เขียว','เหลือง'],th:'วันพุธ — เขียวเสริมความคิดสร้างสรรค์และการสื่อสาร',en:'Wednesday — green sharpens creativity and communication.'},
+     money:{c:['เขียว','เหลือง'],th:'วันพุธ — เขียวเสริมการเติบโตทางการเงิน',en:'Wednesday — green promotes steady financial growth.'},
+     love:{c:['เขียว','ฟ้า'],th:'วันพุธ — เขียวเสริมความสดชื่นในความรัก',en:'Wednesday — green brings fresh harmony to relationships.'},
+     senior:{c:['เขียว','ขาว'],th:'วันพุธ — ดูน่าไว้วางใจและมีความรับผิดชอบ',en:'Wednesday — projects reliability and responsibility.'},
+     social:{c:['เขียว','เหลือง'],th:'วันพุธ — เสน่ห์ธรรมชาติที่ดึงดูดคน',en:'Wednesday — natural charm flows effortlessly.'},
+     health:{c:['เขียว','เขียวเข้ม'],th:'วันพุธ — เขียวธรรมชาติเสริมสุขภาพองค์รวม',en:'Wednesday — natural green heals and balances body and mind.'},
+     protection:{c:['เขียว','ขาว'],th:'วันพุธ — พลังธรรมชาติปกป้องและรักษา',en:'Wednesday — nature\'s energy heals and shields.'},
+     avoid:{th:'แดง',en:'Red',hex:'#D94040'}},
+  4:{career:{c:['เขียว','น้ำเงิน'],th:'วันพฤหัส — เสริมปัญญาและการตัดสินใจที่ดี',en:'Thursday — sharpens wisdom and sound judgment.'},
+     money:{c:['เหลือง','ส้ม'],th:'วันพฤหัส — วันพระ เหลืองทองเสริมโชคลาภสูง',en:'Thursday — sacred day, golden yellow powerfully attracts wealth.'},
+     love:{c:['ส้ม','เหลือง'],th:'วันพฤหัส — อบอุ่นและสนุกสนานในความรัก',en:'Thursday — warm, joyful energy fills relationships.'},
+     senior:{c:['เขียว','เหลือง'],th:'วันพฤหัส — เสริมบารมีและให้ผู้ใหญ่ประทับใจ',en:'Thursday — impresses seniors with wisdom and warmth.'},
+     social:{c:['ส้ม','เหลือง'],th:'วันพฤหัส — ทำให้เป็นศูนย์กลางความสนุก',en:'Thursday — vibrant and energetic, you light up any room.'},
+     health:{c:['ส้ม','เหลือง'],th:'วันพฤหัส — ส้มเหลืองเสริมพลังและกระปรี้กระเปร่า',en:'Thursday — orange and yellow energize and invigorate.'},
+     protection:{c:['น้ำเงิน','เหลือง'],th:'วันพฤหัส — คุ้มครองจากอุบัติเหตุและสิ่งร้าย',en:'Thursday — guards against unexpected danger.'},
+     avoid:{th:'ม่วง',en:'Purple',hex:'#8A5CC8'}},
+  5:{career:{c:['ฟ้า','ม่วงอ่อน'],th:'วันศุกร์ — เสริมความคิดสร้างสรรค์และการสื่อสาร',en:'Friday — boosts creative thinking and clear communication.'},
+     money:{c:['ฟ้า','ขาว'],th:'วันศุกร์ — เสริมการไหลเวียนของโชคลาภ',en:'Friday — promotes smooth and continuous flow of luck.'},
+     love:{c:['ชมพู','ฟ้า'],th:'วันศุกร์ เป็นวันแห่งความรัก ชมพูเสริมเสน่ห์อย่างแรง',en:'Friday is the day of love — pink powerfully amplifies romance.'},
+     senior:{c:['ขาว','ฟ้า'],th:'วันศุกร์ — ดูบริสุทธิ์และน่าเชื่อถือ',en:'Friday — projects purity that seniors respect.'},
+     social:{c:['ชมพู','ฟ้า'],th:'วันศุกร์ — เสริมเสน่ห์รอบด้านและความเป็นที่รัก',en:'Friday — warm all-round charm makes you universally loved.'},
+     health:{c:['ฟ้า','ขาว'],th:'วันศุกร์ — ฟ้าขาวเสริมความสงบและสุขภาพจิต',en:'Friday — sky blue and white calm mind and support health.'},
+     protection:{c:['ขาว','ฟ้า'],th:'วันศุกร์ — ขาวบริสุทธิ์สลายพลังลบทุกอย่าง',en:'Friday — pure white light dissolves all negative energy.'},
+     avoid:{th:'แดง',en:'Red',hex:'#D94040'}},
+  6:{career:{c:['ม่วง','น้ำเงิน'],th:'วันเสาร์ — เสริมสถานะและความก้าวหน้า',en:'Saturday — builds professional status and steady advancement.'},
+     money:{c:['ม่วง','ดำ'],th:'วันเสาร์ — เสริมความมั่งคั่งและทรัพย์ถาวร',en:'Saturday — attracts lasting, permanent wealth.'},
+     love:{c:['ม่วง','น้ำเงิน'],th:'วันเสาร์ — เสริมความลึกซึ้งและความจริงจังในความรัก',en:'Saturday — deepens serious, committed romantic bonds.'},
+     senior:{c:['ม่วง','ดำ'],th:'วันเสาร์ — เสริมบารมีและทำให้น่าเคารพ',en:'Saturday — projects gravitas and commands senior respect.'},
+     social:{c:['ม่วงอ่อน','ม่วง'],th:'วันเสาร์ — เสน่ห์ลึกลับและน่าดึงดูดอย่างเงียบๆ',en:'Saturday — mysterious, quietly magnetic social charm.'},
+     health:{c:['ม่วง','ดำ'],th:'วันเสาร์ — ม่วงดำเสริมความแข็งแกร่งและอดทน',en:'Saturday — deep purple and black build endurance and strength.'},
+     protection:{c:['ดำ','ม่วง'],th:'วันเสาร์ — ดำและม่วงคุ้มครองสูงสุด',en:'Saturday — black and purple offer the strongest protection.'},
+     avoid:{th:'เขียว',en:'Green',hex:'#4CAF7D'}}
+};
+
+const TH_DAYS=['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'];
+const EN_DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const BL={
+  career:{th:'การงาน',en:'💼 Career'},money:{th:'การเงิน',en:'💰 Money'},
+  love:{th:'ความรัก',en:'🌸 Love'},senior:{th:'ผู้ใหญ่',en:'🙏 Senior'},
+  social:{th:'เมตตา',en:'✨ Charm'},health:{th:'สุขภาพ',en:'🌿 Health'},
+  protection:{th:'คุ้มครอง',en:'🛡️ Protect'}
+};
+
+// store birthdate for re-render on chip switch
+let _bd={d:null,m:null,y:null};
+
+function getBirthKey(d,m,y,wc){
+  const dow=new Date(y,m-1,d).getDay();
+  if(dow===3) return wc==='night'?4:3;
+  return dow;
+}
+
+function generate(){
+  const d=+document.getElementById('bday').value;
+  const m=+document.getElementById('bmonth').value;
+  const y=+document.getElementById('byear').value;
+  const err=document.getElementById('err');
+  if(!d||!m||!y||!blessing){err.classList.add('show');return;}
+  const rawDow=new Date(y,m-1,d).getDay();
+  if(rawDow===3&&!wed){err.textContent='⚠ กรุณาเลือกช่วงเวลาเกิด (พุธกลางวัน/กลางคืน)';err.classList.add('show');return;}
+  err.classList.remove('show');
+  _bd={d,m,y};
+  birthKey=getBirthKey(d,m,y,wed);
+  todayDow=new Date().getDay();
+  renderResult(blessing);
+  document.getElementById('form-wrap').style.display='none';
+  const rw=document.getElementById('result-wrap');
+  rw.classList.add('show');
+  setTimeout(()=>window.scrollTo({top:0,behavior:'smooth'}),50);
+}
+
+function renderResult(bl){
+  blessing=bl;
+  // update chips
+  const chips=document.getElementById('bless-chips');
+  chips.innerHTML='';
+  Object.keys(BL).forEach(key=>{
+    const ch=document.createElement('button');
+    ch.className='chip'+(key===bl?' on':'');
+    ch.textContent=BL[key].th;
+    ch.onclick=()=>renderResult(key);
+    chips.appendChild(ch);
+  });
+
+  const personal=BIRTH[birthKey][bl];
+  const todayD=TODAY[todayDow][bl];
+  const todayAvoid=TODAY[todayDow].avoid;
+  const personalAvoid=BIRTH[birthKey].avoid;
+
+  // ── กาลกิณี check: is personal primary = birth day's own forbidden color? ──
+  const primaryName=personal.c[0];
+  const isKalikini=(primaryName===personalAvoid.th);
+  const displayName=isKalikini?(personal.c[1]||personal.c[0]):primaryName;
+  const displayHex=HX[displayName]||'#888';
+
+  // ── Hero zones — apply colour to all three top zones ──
+  ['hero-top','hero-orb-zone','hero-name-zone'].forEach(id=>{
+    document.getElementById(id).style.background=displayHex;
+  });
+  document.getElementById('hero-orb').style.background=
+    `linear-gradient(135deg,${lighten(displayHex,38)},${displayHex})`;
+  document.getElementById('hero-badge').textContent=`⭐ สีมงคลของคุณ · ${BL[bl].en}`;
+  document.getElementById('hero-name').textContent=`สี${displayName}`;
+  document.getElementById('hero-name-en').textContent=displayName;
+  document.getElementById('hero-meaning').textContent=personal.th;
+  document.getElementById('hero-meaning-en').textContent=personal.en;
+
+  // กาลกิณี warning inside hero body
+  const kwrap=document.getElementById('kalikini-wrap');
+  if(isKalikini){
+    kwrap.innerHTML=`<div class="kalikini-warn">
+      ⚠ <strong>สี${primaryName} เป็นสีกาลกิณีของวันเกิดคุณ</strong><br>
+      สีมงคลหลักวันเกิดของคุณตรงกับสีต้องห้าม จึงแสดงสีรอง <strong>สี${displayName}</strong> แทน<br>
+      <span style="opacity:.75;font-size:11px;">Your primary birth color (${primaryName}) is your own forbidden color — showing secondary สี${displayName} instead.</span>
+    </div>`;
+  } else { kwrap.innerHTML=''; }
+
+  // Secondaries row (show remaining colors, skip promoted one if kalikini)
+  const secsToShow=isKalikini
+    ? personal.c.filter(n=>n!==displayName&&n!==primaryName)
+    : personal.c.slice(1);
+  const secEl=document.getElementById('hero-secondaries');
+  if(secsToShow.length){
+    secEl.style.display='flex';
+    secEl.innerHTML=`<span class="sec-label">รองลงมา</span>`+
+      secsToShow.map(n=>`<div class="sec-dot" style="background:${HX[n]||'#888'}"></div><span class="sec-name">สี${n}</span>`).join('');
+  } else { secEl.style.display='none'; }
+
+  const rawDow=new Date(_bd.y,_bd.m-1,_bd.d).getDay();
+  const blLabel=birthKey===3?'พุธกลางวัน':birthKey===4?'พุธกลางคืน':TH_DAYS[rawDow];
+  document.getElementById('born-strip').textContent=
+    `📅 เกิดวัน${blLabel} · ${birthKey===3?'Wednesday (day)':birthKey===4?'Wednesday (night)':EN_DAYS[rawDow]}`;
+
+  // Conflict — personal display color vs TODAY's avoid
+  const conf=document.getElementById('conflict-note');
+  if(displayName===todayAvoid.th){
+    const alt=personal.c.find(n=>n!==displayName&&n!==todayAvoid.th)||'ขาว';
+    conf.innerHTML=`⚠ <strong>หมายเหตุ:</strong> สีมงคลของคุณ (สี${displayName}) ตรงกับสีกาลกิณีของวันนี้ แนะนำสวมสี<strong>${alt}</strong>แทนวันนี้`;
+    conf.style.display='block';
+  } else { conf.style.display='none'; }
+
+  // ── Today ──
+  document.getElementById('today-subtitle').textContent=
+    `วัน${TH_DAYS[todayDow]} · ${EN_DAYS[todayDow]}`;
+  const tcEl=document.getElementById('today-colors');
+  tcEl.innerHTML=todayD.c.map((n,i)=>`
+    <div class="tc-pill">
+      <div class="tc-dot ${i===0?'main':'sub'}" style="background:${HX[n]||'#888'}"></div>
+      <div class="tc-name">สี${n}</div>
+      <div class="tc-tag ${i===0?'tc-primary':'tc-secondary'}">${i===0?'หลัก':'รอง'}</div>
+    </div>`).join('');
+  document.getElementById('today-text').textContent=todayD.th;
+  document.getElementById('today-text-en').textContent=todayD.en;
+  document.getElementById('avoid-dot').style.background=todayAvoid.hex;
+  document.getElementById('avoid-label').innerHTML=
+    `<strong>ห้ามใส่วันนี้:</strong> สี${todayAvoid.th} (${todayAvoid.en})`;
+
+  // store for share
+  window._R={bestName:displayName,personal,todayD,todayDow,blLabel,blessing:bl};
+}
+
+function lighten(hex,amt){
+  let r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  r=Math.min(255,r+amt);g=Math.min(255,g+amt);b=Math.min(255,b+amt);
+  return '#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('');
+}
+
+function goBack(){
+  document.getElementById('form-wrap').style.display='block';
+  document.getElementById('result-wrap').classList.remove('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function doCopy(){
+  const r=window._R; if(!r)return;
+  const bl=BL[r.blessing];
+  const txt=`✦ สีเสื้อมงคลของฉันวันนี้ ✦\nเพื่อ: ${bl.th}\n\n⭐ สีมงคลของฉัน (วัน${r.blLabel}): สี${r.bestName}\n${r.personal.th}\n\n🌍 สีมงคลวันนี้ (${TH_DAYS[r.todayDow]}): ${r.todayD.c.map(c=>'สี'+c).join(', ')}\n\n#สีเสื้อมงคล #สายมู #LuckyColor`;
+  navigator.clipboard.writeText(txt).then(()=>alert('คัดลอกแล้ว! / Copied!')).catch(()=>alert('Please copy manually.'));
+}
+
+function doShare(){
+  const r=window._R; if(!r)return;
+  const bl=BL[r.blessing];
+  const txt=`✦ สีมงคลของฉันวันนี้เพื่อ${bl.th} คือ สี${r.bestName}! ✦\n${r.personal.th}\n#สีเสื้อมงคล #สายมู`;
+  if(navigator.share){navigator.share({title:'สีเสื้อมงคล',text:txt}).catch(()=>{});}
+  else doCopy();
+}
+
+function showPremium(){
+  alert('ขอบคุณที่สนใจ! 🙏\n\nฟีเจอร์พรีเมียมกำลังมาเร็วๆ นี้\nPremium feature coming soon!\n\nติดตาม Facebook / TikTok: สีเสื้อมงคล ✦');
+}
+
+function saveImage(){
+  const r=window._R; if(!r){alert('กรุณาดูสีมงคลก่อน');return;}
+  const btn=document.getElementById('save-btn');
+  btn.textContent='⏳ กำลังสร้าง...';
+  btn.disabled=true;
+
+  const W=900, H=900;
+  const cvs=document.getElementById('share-canvas');
+  cvs.width=W; cvs.height=H;
+  const ctx=cvs.getContext('2d');
+
+  const mainHex=HX[r.bestName]||'#888';
+  const bl=BL[r.blessing];
+  const today=new Date();
+  const dateStr=today.toLocaleDateString('th-TH',{day:'numeric',month:'long',year:'numeric'});
+
+  // ── helpers ──────────────────────────────────────
+  function hexToRgb(h){
+    const v=parseInt(h.replace('#',''),16);
+    return[(v>>16)&255,(v>>8)&255,v&255];
+  }
+  function isDark(h){const[r,g,b]=hexToRgb(h);return(r*299+g*587+b*114)/1000<140;}
+  function lightenHex(h,a){
+    let[r,g,b]=hexToRgb(h);
+    return`rgb(${Math.min(255,r+a)},${Math.min(255,g+a)},${Math.min(255,b+a)})`;
+  }
+  function wrapText(ctx,text,x,y,maxW,lineH){
+    const words=text.split(' ');
+    let line='';
+    for(let w of words){
+      const test=line+w+' ';
+      if(ctx.measureText(test).width>maxW&&line){
+        ctx.fillText(line.trim(),x,y);
+        line=w+' '; y+=lineH;
+      } else line=test;
+    }
+    if(line.trim())ctx.fillText(line.trim(),x,y);
+    return y;
+  }
+
+  // ── Background gradient ──────────────────────────
+  const grd=ctx.createLinearGradient(0,0,0,H);
+  grd.addColorStop(0,mainHex);
+  grd.addColorStop(0.55,lightenHex(mainHex,-30));
+  grd.addColorStop(1,'#1A1612');
+  ctx.fillStyle=grd;
+  ctx.fillRect(0,0,W,H);
+
+  // subtle radial highlight top-right
+  const hl=ctx.createRadialGradient(W*0.75,H*0.12,0,W*0.75,H*0.12,W*0.5);
+  hl.addColorStop(0,'rgba(255,255,255,0.10)');
+  hl.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=hl;
+  ctx.fillRect(0,0,W,H);
+
+  const textCol=isDark(mainHex)?'#FFFFFF':'#1A1612';
+  const textMuted=isDark(mainHex)?'rgba(255,255,255,0.6)':'rgba(0,0,0,0.5)';
+  const textFaint=isDark(mainHex)?'rgba(255,255,255,0.35)':'rgba(0,0,0,0.3)';
+
+  // ── Decorative top divider ────────────────────────
+  ctx.strokeStyle='rgba(255,255,255,0.18)';
+  ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(60,72); ctx.lineTo(W-60,72); ctx.stroke();
+
+  // ── Eyebrow ───────────────────────────────────────
+  ctx.font='500 26px Sarabun, sans-serif';
+  ctx.fillStyle='rgba(255,255,255,0.7)';
+  ctx.textAlign='center';
+  ctx.fillText('✦  สีเสื้อมงคล  ·  Lucky Color  ✦',W/2,58);
+
+  // ── Big colour orb ────────────────────────────────
+  const orbX=W/2, orbY=310, orbR=170;
+  // glow ring
+  const orbGlow=ctx.createRadialGradient(orbX,orbY,orbR*0.6,orbX,orbY,orbR*1.6);
+  orbGlow.addColorStop(0,'rgba(255,255,255,0.18)');
+  orbGlow.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=orbGlow; ctx.beginPath(); ctx.arc(orbX,orbY,orbR*1.6,0,Math.PI*2); ctx.fill();
+  // main orb
+  const orbGrad=ctx.createRadialGradient(orbX-orbR*0.3,orbY-orbR*0.3,0,orbX,orbY,orbR);
+  orbGrad.addColorStop(0,lightenHex(mainHex,55));
+  orbGrad.addColorStop(1,mainHex);
+  ctx.fillStyle=orbGrad; ctx.beginPath(); ctx.arc(orbX,orbY,orbR,0,Math.PI*2); ctx.fill();
+  // orb border
+  ctx.strokeStyle='rgba(255,255,255,0.4)'; ctx.lineWidth=4;
+  ctx.beginPath(); ctx.arc(orbX,orbY,orbR,0,Math.PI*2); ctx.stroke();
+
+  // ── Colour name ───────────────────────────────────
+  ctx.textAlign='center';
+  ctx.fillStyle='#FFFFFF';
+  ctx.font='bold 88px "Playfair Display", serif';
+  ctx.fillText(`สี${r.bestName}`, W/2, 540);
+  ctx.font='400 30px Sarabun, sans-serif';
+  ctx.fillStyle='rgba(255,255,255,0.65)';
+  ctx.fillText(r.bestName, W/2, 582);
+
+  // ── Horizontal rule ───────────────────────────────
+  ctx.strokeStyle='rgba(255,255,255,0.2)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(120,612); ctx.lineTo(W-120,612); ctx.stroke();
+
+  // ── Blessing badge ────────────────────────────────
+  const badgeW=320, badgeH=46, badgeX=(W-badgeW)/2, badgeY=628;
+  ctx.fillStyle='rgba(255,255,255,0.14)';
+  roundRect(ctx,badgeX,badgeY,badgeW,badgeH,23);
+  ctx.fill();
+  ctx.font='500 22px Sarabun, sans-serif';
+  ctx.fillStyle='rgba(255,255,255,0.9)';
+  ctx.fillText(`${bl.en}  ·  ${bl.th}`, W/2, badgeY+30);
+
+  // ── Meaning text ──────────────────────────────────
+  ctx.font='400 24px Sarabun, sans-serif';
+  ctx.fillStyle='rgba(255,255,255,0.82)';
+  ctx.textAlign='center';
+  wrapText(ctx, r.personal.th, W/2, 710, W-160, 36);
+
+  // ── Bottom strip ──────────────────────────────────
+  ctx.fillStyle='rgba(0,0,0,0.3)';
+  ctx.fillRect(0, H-80, W, 80);
+  ctx.strokeStyle='rgba(255,255,255,0.1)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(0,H-80); ctx.lineTo(W,H-80); ctx.stroke();
+
+  ctx.font='400 22px Sarabun, sans-serif';
+  ctx.fillStyle='rgba(255,255,255,0.45)';
+  ctx.textAlign='left';
+  ctx.fillText(`เกิดวัน${r.blLabel}  ·  ${dateStr}`, 50, H-32);
+  ctx.textAlign='right';
+  ctx.fillText('สีเสื้อมงคล Generator', W-50, H-32);
+
+  // ── Export ────────────────────────────────────────
+  try{
+    cvs.toBlob(blob=>{
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');
+      a.href=url;
+      a.download=`mongkol-สี${r.bestName}-${Date.now()}.png`;
+      a.click();
+      URL.revokeObjectURL(url);
+      btn.textContent='✅ บันทึกแล้ว! / Saved!';
+      btn.disabled=false;
+      setTimeout(()=>{btn.textContent='🖼️ บันทึกรูปภาพ · Save Image';},2500);
+    },'image/png');
+  }catch(e){
+    // iOS Safari fallback — open in new tab
+    const url=cvs.toDataURL('image/png');
+    window.open(url,'_blank');
+    btn.textContent='🖼️ บันทึกรูปภาพ · Save Image';
+    btn.disabled=false;
+  }
+}
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();
+}
+</script>
+</body>
+</html>
