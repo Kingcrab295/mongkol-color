@@ -263,7 +263,7 @@ select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201
 
     <!-- Actions -->
     <div class="actions">
-      <button class="act-btn" onclick="doCopy()">📋 คัดลอก</button>
+      <button class="act-btn" onclick="doCopy()">📋 คัดลอกข้อความ</button>
       <button class="act-btn" onclick="doShare()">🔗 แชร์</button>
     </div>
     <button class="act-btn" id="save-btn" onclick="saveImage()" style="width:100%;margin-bottom:12px;">
@@ -282,14 +282,14 @@ select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201
         <div class="p-feat"><span class="p-dot">✦</span><span>สีต้องห้าม 3 สีห้ามใส่เด็ดขาด</span></div>
         <div class="p-feat"><span class="p-dot">✦</span><span>การ์ดมงคลส่วนตัว แชร์ได้ทุก platform</span></div>
       </div>
-      <button class="p-btn" onclick="showPremium()">🌟 ดูรายละเอียด · ฿39</button>
-      <div class="p-price">ชำระครั้งเดียว via PromptPay</div>
+      <button class="p-btn" onclick="showPremium()">🌟 ขอดูรายละเอียด · Learn More</button>
+      <div class="p-price">coming soon · เร็วๆ นี้</div>
     </div>
   </div>
 
   <div class="footer">
     สีเสื้อมงคล · Lucky Color Generator<br>
-    อ้างอิงตารางสีมงคลประจำวันเกิดแบบไทยดั้งเดิม<br>
+    อ้างอิงตารางสีมงคลประจำวันเกิด ปี 2569 (ไทยรัฐ)<br>
     <span style="opacity:.5">ความเชื่อส่วนบุคคล · For personal belief &amp; fun ✦</span>
   </div>
 </div>
@@ -336,73 +336,81 @@ const HX={
   'ครีม':'#F0E8C8','ทอง':'#C9A84C','ม่วงอ่อน':'#B89AD4','เขียวเข้ม':'#2E7D4F','ส้มแดง':'#D4602A'
 };
 
-// ── BIRTH DAY MATRIX ───────────────────────────
+// ── BIRTH DAY MATRIX (อัปเดต 2569 — อ้างอิง Thairath) ────────
 // 0=Sun,1=Mon,2=Tue,3=WedDay,4=WedNight,5=Thu,6=Fri,7=Sat
 const BIRTH={
-  1:{health:{c:['ชมพู','ฟ้า'],th:'เสริมสุขภาพ ความสดชื่น และการฟื้นฟูร่างกาย',en:'Promotes healing, freshness, and body recovery.'},
-     money:{c:['ม่วง','น้ำเงิน'],th:'เสริมโชคลาภและความมั่งคั่งทางการเงิน',en:'Attracts wealth and financial stability.'},
-     love:{c:['น้ำเงิน','ม่วง'],th:'เสริมความจริงใจและความลึกซึ้งในความรัก',en:'Deepens emotional sincerity and lasting bonds.'},
-     senior:{c:['ฟ้า','ครีม'],th:'ทำให้ผู้ใหญ่เมตตาและให้การสนับสนุน',en:'Earns warmth and support from senior figures.'},
-     social:{c:['ชมพู','ครีม'],th:'เสริมเสน่ห์ ทำให้เป็นที่รักของคนรอบข้าง',en:'Enhances charm and social likability.'},
-     career:{c:['เขียว','ส้ม'],th:'เสริมความก้าวหน้าและความสำเร็จในการงาน',en:'Promotes career growth and professional success.'},
-     protection:{c:['น้ำเงิน','ดำ'],th:'ป้องกันสิ่งชั่วร้ายและพลังงานลบ',en:'Shields against negative forces and harmful people.'},
+  // จันทร์ Monday — career:เขียว, money:ส้ม, luck:ม่วง, social:ฟ้า, avoid:แดง
+  1:{career:{c:['เขียว','ส้ม'],th:'ปี 2569 — เขียวเสริมการงานให้รุ่งเรือง ก้าวหน้า',en:'2026 — green drives career growth and advancement.'},
+     money:{c:['ส้ม','น้ำตาล'],th:'ปี 2569 — ส้มเสริมการเงินและรายได้ไหลเข้า',en:'2026 — orange attracts income and financial flow.'},
+     love:{c:['ม่วง','เขียว'],th:'ปี 2569 — ม่วงเสริมความลึกและจริงใจในความรัก',en:'2026 — purple deepens sincerity and romantic bonds.'},
+     senior:{c:['ฟ้า','ม่วง'],th:'ปี 2569 — ฟ้าเสริมเมตตา ทำให้ผู้ใหญ่สนับสนุน',en:'2026 — sky blue earns warmth and support from seniors.'},
+     social:{c:['ฟ้า','ชมพู'],th:'ปี 2569 — ฟ้าเสริมเสน่ห์และเมตตามหานิยม',en:'2026 — blue enhances charm and social magnetism.'},
+     health:{c:['เขียว','ฟ้า'],th:'ปี 2569 — เขียวเสริมพลังชีวิตและสุขภาพแข็งแรง',en:'2026 — green boosts vitality and physical wellness.'},
+     protection:{c:['ม่วง','น้ำเงิน'],th:'ปี 2569 — ม่วงและน้ำเงินป้องกันพลังลบ',en:'2026 — purple and navy shield against negative forces.'},
      avoid:{th:'แดง',en:'Red',hex:'#D94040'}},
-  2:{health:{c:['เขียว'],th:'เสริมพลังชีวิตและภูมิต้านทาน',en:'Strengthens immunity and vital energy.'},
-     money:{c:['ส้ม','น้ำตาล'],th:'เสริมรายได้และโชคค้าขาย',en:'Boosts income and trading fortune.'},
-     love:{c:['แดง','ส้ม'],th:'เสริมความหลงใหลและความโรแมนติก',en:'Ignites passion and deep romantic attraction.'},
-     senior:{c:['ชมพู'],th:'ทำให้ผู้ใหญ่รู้สึกอบอุ่นและเมตตา',en:'Warms the hearts of seniors toward you.'},
-     social:{c:['ส้ม','ชมพู'],th:'เสริมความสนุกสนานและเสน่ห์ดึงดูด',en:'Makes you lively, fun, and magnetically charming.'},
-     career:{c:['แดง','ม่วง'],th:'เสริมความกล้าและความเป็นผู้นำ',en:'Boosts boldness and leadership presence.'},
-     protection:{c:['ดำ','แดง'],th:'ป้องกันคุณไสยและคนอิจฉา',en:'Powerful shield against black magic and envy.'},
-     avoid:{th:'เหลือง',en:'Yellow',hex:'#D4AC0D'}},
-  3:{health:{c:['ม่วง','ฟ้า'],th:'เสริมสุขภาพจิตและความสงบภายใน',en:'Calms the mind and supports mental wellbeing.'},
-     money:{c:['ดำ','น้ำตาล'],th:'เสริมความมั่นคงและการสะสมทรัพย์',en:'Builds stable, lasting wealth.'},
-     love:{c:['ดำ','ม่วงอ่อน'],th:'เสริมความลึกลับและแรงดึงดูดใจ',en:'Adds mystery and deep magnetic attraction.'},
-     senior:{c:['ม่วง','ครีม'],th:'ทำให้ผู้ใหญ่ประทับใจและเคารพ',en:'Commands respect and admiration from seniors.'},
-     social:{c:['เขียว','ม่วงอ่อน'],th:'เสริมบุคลิกโดดเด่นและน่าดึงดูด',en:'Distinctive personal charm that draws people in.'},
-     career:{c:['ส้ม','แดง'],th:'เสริมความคิดสร้างสรรค์และการลงมือทำ',en:'Sparks creativity and decisive action at work.'},
-     protection:{c:['ดำ','ม่วง'],th:'ป้องกันสิ่งชั่วร้ายและพลังงานลบทุกชนิด',en:'Comprehensive protection against all negative forces.'},
-     avoid:{th:'แดง',en:'Red',hex:'#D94040'}},
-  4:{health:{c:['น้ำเงิน','ม่วง'],th:'เสริมความแข็งแกร่งและพลังงานสูง',en:'Strengthens physical power and high energy.'},
-     money:{c:['เหลือง','ครีม'],th:'เสริมโชคลาภอย่างต่อเนื่องและสม่ำเสมอ',en:'Brings consistent, flowing financial luck.'},
-     love:{c:['เทา','ม่วงอ่อน'],th:'เสริมความสงบและความเข้าใจกันในความรัก',en:'Brings calm understanding and emotional maturity.'},
-     senior:{c:['ม่วง'],th:'ทำให้ผู้ใหญ่ยอมรับและไว้วางใจ',en:'Earns trust and recognition from authority figures.'},
-     social:{c:['ฟ้า','เทา'],th:'เสริมภาพลักษณ์ที่น่าเชื่อถือและมีเสน่ห์',en:'Projects trustworthy, calm, attractive energy.'},
-     career:{c:['แดง','ม่วง'],th:'เสริมพลังงานและความมุ่งมั่นในการทำงาน',en:'Drives ambition and unstoppable work energy.'},
-     protection:{c:['น้ำเงิน','ดำ'],th:'คุ้มครองจากอุบัติเหตุและคนร้าย',en:'Protects against accidents and dangerous people.'},
-     avoid:{th:'แดง',en:'Red',hex:'#D94040'}},
-  5:{health:{c:['ดำ','น้ำเงิน'],th:'เสริมพลังและความอดทนของร่างกาย',en:'Builds physical endurance and strength.'},
-     money:{c:['แดง','ส้ม'],th:'เสริมโชคลาภและรายได้พิเศษ',en:'Attracts extra income and financial windfalls.'},
-     love:{c:['แดง','ส้ม'],th:'เสริมความหลงใหลและความตื่นเต้นในความรัก',en:'Brings excitement and passionate energy to romance.'},
-     senior:{c:['เขียว','น้ำเงิน'],th:'ทำให้ผู้ใหญ่ชื่นชมและให้โอกาส',en:'Earns admiration and career opportunities from seniors.'},
-     social:{c:['ส้มแดง','เหลือง'],th:'เสริมความสนุกและความเป็นศูนย์กลางกลุ่ม',en:'Makes you the energetic center of any group.'},
-     career:{c:['น้ำเงิน','เขียว'],th:'เสริมสติปัญญาและการตัดสินใจที่ดี',en:'Sharpens wisdom and sound decision-making at work.'},
-     protection:{c:['น้ำเงิน','ดำ'],th:'คุ้มครองจากสิ่งชั่วร้ายและเหตุร้าย',en:'Strong protective barrier against misfortune.'},
-     avoid:{th:'ม่วง',en:'Purple',hex:'#8A5CC8'}},
-  6:{health:{c:['ฟ้า','ขาว'],th:'เสริมสุขภาพและความสงบจิตใจ',en:'Calms the mind and promotes inner peace.'},
-     money:{c:['ฟ้า','ขาว'],th:'เสริมการไหลเวียนของโชคและเงินทอง',en:'Promotes smooth and continuous flow of money.'},
-     love:{c:['ฟ้า','ชมพู'],th:'วันศุกร์เป็นวันแห่งความรัก เสริมเสน่ห์อย่างแรง',en:'Friday is the day of love — powerful romantic energy.'},
-     senior:{c:['ขาว','ฟ้า'],th:'ทำให้ดูน่าเชื่อถือและผู้ใหญ่ชอบ',en:'Projects purity and trustworthiness to authority figures.'},
-     social:{c:['ชมพู','ฟ้า'],th:'เสริมเสน่ห์รอบด้าน ทำให้เป็นที่รักของทุกคน',en:'All-round charm boost — warm and naturally lovable.'},
-     career:{c:['ม่วงอ่อน','เหลือง'],th:'เสริมความคิดสร้างสรรค์และการสื่อสารที่ดี',en:'Enhances creative thinking and clear communication.'},
-     protection:{c:['ขาว','ฟ้า'],th:'ปกป้องด้วยพลังบริสุทธิ์ สลายพลังลบทุกอย่าง',en:'Pure white energy dissolves all negativity.'},
-     avoid:{th:'แดง',en:'Red',hex:'#D94040'}},
-  7:{health:{c:['เหลือง','ทอง'],th:'เสริมสุขภาพและความรุ่งเรืองของร่างกาย',en:'Golden energy brings radiant health and vitality.'},
-     money:{c:['ม่วง','น้ำเงิน'],th:'เสริมความมั่งคั่งและบารมีทางการเงิน',en:'Builds wealth, prestige, and financial authority.'},
-     love:{c:['ม่วง','ชมพู'],th:'เสริมความลึกซึ้งและความจริงใจในความรัก',en:'Deepens emotional sincerity and romantic bonds.'},
-     senior:{c:['ม่วง','ดำ'],th:'เสริมบารมีและทำให้ผู้ใหญ่ยอมรับ',en:'Projects authority and earns senior respect.'},
-     social:{c:['ม่วงอ่อน','ชมพู'],th:'เสริมเสน่ห์ที่ละเอียดอ่อนและน่าดึงดูด',en:'Subtle, refined charm that quietly draws people in.'},
-     career:{c:['น้ำเงิน','ม่วง'],th:'เสริมสถานะและความก้าวหน้าในหน้าที่',en:'Builds status and steady career advancement.'},
-     protection:{c:['ดำ','ม่วง'],th:'วันเสาร์ ดำคุ้มครองสูงสุด ป้องกันทุกสิ่งร้าย',en:'Saturday\'s strongest shield — black blocks all evil.'},
+  // อังคาร Tuesday — career:ม่วง, money:เทา, luck:น้ำตาล, social:แดง, avoid:ขาว/เหลือง
+  2:{career:{c:['ม่วง','ชมพู'],th:'ปี 2569 — ม่วงเสริมบารมีและความก้าวหน้าในงาน',en:'2026 — purple builds authority and career progress.'},
+     money:{c:['เทา','น้ำตาล'],th:'ปี 2569 — เทาเสริมความมั่นคงทางการเงิน',en:'2026 — gray brings steady financial stability.'},
+     love:{c:['ม่วง','ดำ'],th:'ปี 2569 — ม่วงและดำเสริมความลึกลับและเสน่ห์',en:'2026 — purple and black deepen mystery and attraction.'},
+     senior:{c:['แดง','ม่วง'],th:'ปี 2569 — แดงเสริมเมตตาและให้ผู้ใหญ่เมตตา',en:'2026 — red earns senior favour and support.'},
+     social:{c:['แดง','ส้ม'],th:'ปี 2569 — แดงเสริมเสน่ห์และพลังดึงดูด',en:'2026 — red radiates magnetic charm and energy.'},
+     health:{c:['ม่วง','แดง'],th:'ปี 2569 — ม่วงเสริมพลังและความอดทนร่างกาย',en:'2026 — purple strengthens endurance and body power.'},
+     protection:{c:['ดำ','น้ำตาล'],th:'ปี 2569 — ดำปกป้องคุณไสยและสิ่งชั่วร้าย',en:'2026 — black shields against dark energy and envy.'},
+     avoid:{th:'ขาว',en:'White',hex:'#E8E4DC'}},
+  // พุธกลางวัน Wednesday day — career:ส้ม, money:ฟ้า, luck:เทา, social:เหลือง, avoid:ชมพู
+  3:{career:{c:['ส้ม','เขียว'],th:'ปี 2569 — ส้มเสริมความคิดสร้างสรรค์และการงานรุ่ง',en:'2026 — orange sparks creativity and career momentum.'},
+     money:{c:['ฟ้า','เทา'],th:'ปี 2569 — ฟ้าเสริมการเงินให้ไหลลื่นสม่ำเสมอ',en:'2026 — blue promotes smooth and consistent money flow.'},
+     love:{c:['เทา','ม่วงอ่อน'],th:'ปี 2569 — เทาเสริมความสงบและเข้าใจในความรัก',en:'2026 — gray brings calm and mature understanding in love.'},
+     senior:{c:['เหลือง','ส้ม'],th:'ปี 2569 — เหลืองเสริมเมตตาและให้ผู้ใหญ่ประทับใจ',en:'2026 — yellow earns admiration and senior goodwill.'},
+     social:{c:['เหลือง','ส้ม'],th:'ปี 2569 — เหลืองเสริมเมตตามหานิยมและเสน่ห์',en:'2026 — yellow boosts charm and social popularity.'},
+     health:{c:['ส้ม','เขียว'],th:'ปี 2569 — ส้มเสริมพลังงานและความกระปรี้กระเปร่า',en:'2026 — orange energizes and invigorates the body.'},
+     protection:{c:['เทา','ฟ้า'],th:'ปี 2569 — เทาและฟ้าป้องกันและให้ความมั่นคง',en:'2026 — gray and blue provide stable grounded protection.'},
+     avoid:{th:'ชมพู',en:'Pink',hex:'#F4A0B4'}},
+  // พุธกลางคืน Wednesday night — same base as Wed day, slightly different energy
+  4:{career:{c:['ส้ม','น้ำเงิน'],th:'ปี 2569 — ส้มเสริมการงานและความมุ่งมั่น',en:'2026 — orange drives career ambition and momentum.'},
+     money:{c:['ฟ้า','เทา'],th:'ปี 2569 — ฟ้าเสริมการเงินให้ไหลลื่นต่อเนื่อง',en:'2026 — blue promotes steady and continuous financial flow.'},
+     love:{c:['เทา','ม่วงอ่อน'],th:'ปี 2569 — เทาเสริมความเข้าใจและสมดุลในความรัก',en:'2026 — gray brings balance and emotional maturity in love.'},
+     senior:{c:['เหลือง','ส้ม'],th:'ปี 2569 — เหลืองทำให้ผู้ใหญ่ยอมรับและไว้วางใจ',en:'2026 — yellow earns trust and recognition from seniors.'},
+     social:{c:['เหลือง','ฟ้า'],th:'ปี 2569 — เหลืองเสริมเมตตาและภาพลักษณ์ที่ดี',en:'2026 — yellow projects warmth and likable energy.'},
+     health:{c:['ส้ม','เทา'],th:'ปี 2569 — ส้มเสริมพลังชีวิตและสมดุลร่างกาย',en:'2026 — orange revitalizes and balances physical energy.'},
+     protection:{c:['ฟ้า','เทา'],th:'ปี 2569 — ฟ้าและเทาคุ้มครองและให้ความสงบ',en:'2026 — blue and gray offer calm, steady protection.'},
+     avoid:{th:'ชมพู',en:'Pink',hex:'#F4A0B4'}},
+  // พฤหัสบดี Thursday — career:น้ำเงิน, money:เหลือง, luck:แดง, social:เขียว, avoid:ดำ
+  5:{career:{c:['น้ำเงิน','เขียว'],th:'ปี 2569 — น้ำเงินเสริมปัญญาและการงานมั่นคง',en:'2026 — navy sharpens wisdom and builds career stability.'},
+     money:{c:['เหลือง','แดง'],th:'ปี 2569 — เหลืองเสริมโชคลาภและเงินทองไหลมา',en:'2026 — yellow powerfully attracts wealth and windfalls.'},
+     love:{c:['แดง','ส้ม'],th:'ปี 2569 — แดงเสริมความหลงใหลและโชคความรัก',en:'2026 — red ignites passion and romantic luck.'},
+     senior:{c:['เขียว','น้ำเงิน'],th:'ปี 2569 — เขียวเสริมเมตตาและให้ผู้ใหญ่ชื่นชม',en:'2026 — green earns senior admiration and support.'},
+     social:{c:['เขียว','เหลือง'],th:'ปี 2569 — เขียวเสริมเมตตามหานิยมรอบด้าน',en:'2026 — green radiates natural charm and likability.'},
+     health:{c:['น้ำเงิน','เขียว'],th:'ปี 2569 — น้ำเงินเสริมสุขภาพและความอดทน',en:'2026 — navy builds endurance and steady health.'},
+     protection:{c:['น้ำเงิน','แดง'],th:'ปี 2569 — น้ำเงินคุ้มครองจากภัยและพลังลบ',en:'2026 — navy guards against danger and negative forces.'},
+     avoid:{th:'ดำ',en:'Black',hex:'#2C2C2C'}},
+  // ศุกร์ Friday — career:ขาว, money:เขียว, luck:ชมพู, social:น้ำตาล, avoid:เทา
+  6:{career:{c:['ขาว','เขียว'],th:'ปี 2569 — ขาวเสริมความน่าเชื่อถือและการงานรุ่ง',en:'2026 — white projects professionalism and career success.'},
+     money:{c:['เขียว','ชมพู'],th:'ปี 2569 — เขียวเสริมการเงินและโชคลาภ',en:'2026 — green attracts financial growth and good luck.'},
+     love:{c:['ชมพู','เหลือง'],th:'ปี 2569 — ชมพูเสริมเสน่ห์และโชคความรักอย่างแรง',en:'2026 — pink powerfully amplifies romance and attraction.'},
+     senior:{c:['น้ำตาล','ขาว'],th:'ปี 2569 — น้ำตาลเสริมเมตตาและความน่าไว้วางใจ',en:'2026 — brown builds trust and earns senior warmth.'},
+     social:{c:['น้ำตาล','ชมพู'],th:'ปี 2569 — น้ำตาลเสริมเมตตามหานิยมอย่างมั่นคง',en:'2026 — brown radiates grounded, reliable charm.'},
+     health:{c:['ขาว','เขียว'],th:'ปี 2569 — ขาวเสริมความสะอาดและสุขภาพดี',en:'2026 — white cleanses and supports overall wellbeing.'},
+     protection:{c:['ขาว','น้ำตาล'],th:'ปี 2569 — ขาวบริสุทธิ์ป้องกันและสลายพลังลบ',en:'2026 — pure white dissolves negativity and protects.'},
+     avoid:{th:'เทา',en:'Gray',hex:'#8A8A8A'}},
+  // เสาร์ Saturday — career:น้ำตาล, money:ชมพู, luck:น้ำเงิน, social:ส้ม, avoid:เขียว
+  7:{career:{c:['น้ำตาล','น้ำเงิน'],th:'ปี 2569 — น้ำตาลเสริมความมั่นคงและก้าวหน้าในงาน',en:'2026 — brown builds steady career stability and growth.'},
+     money:{c:['ชมพู','น้ำเงิน'],th:'ปี 2569 — ชมพูเสริมการเงินและโชคลาภ',en:'2026 — pink attracts financial luck and prosperity.'},
+     love:{c:['น้ำเงิน','ชมพู'],th:'ปี 2569 — น้ำเงินเสริมความจริงจังและความลึกในความรัก',en:'2026 — navy deepens serious and committed romantic bonds.'},
+     senior:{c:['ส้ม','น้ำตาล'],th:'ปี 2569 — ส้มเสริมเมตตาและให้ผู้ใหญ่เอ็นดู',en:'2026 — orange earns warmth and goodwill from seniors.'},
+     social:{c:['ส้ม','ชมพู'],th:'ปี 2569 — ส้มเสริมเมตตามหานิยมและความสนุกสนาน',en:'2026 — orange radiates vibrant, magnetic social energy.'},
+     health:{c:['น้ำตาล','ส้ม'],th:'ปี 2569 — น้ำตาลเสริมความมั่นคงและสุขภาพดี',en:'2026 — brown grounds and stabilizes physical health.'},
+     protection:{c:['น้ำเงิน','น้ำตาล'],th:'ปี 2569 — น้ำเงินคุ้มครองสูงสุดในปีนี้',en:'2026 — navy offers the strongest protection this year.'},
      avoid:{th:'เขียว',en:'Green',hex:'#4CAF7D'}},
-  0:{health:{c:['ขาว','เหลือง'],th:'เสริมสุขภาพและความผ่องใส',en:'Brightens health and brings radiant wellbeing.'},
-     money:{c:['ดำ','น้ำเงิน'],th:'เสริมความมั่นคงและทรัพย์สะสม',en:'Builds solid, lasting financial foundations.'},
-     love:{c:['แดง','ดำ'],th:'เสริมความหลงใหลและเสน่ห์ทรงพลัง',en:'Powerful magnetic attraction and passionate romance.'},
-     senior:{c:['เทา','ทอง'],th:'ทำให้ผู้ใหญ่ประทับใจและเมตตาเอ็นดู',en:'Impresses seniors and earns their warm support.'},
-     social:{c:['ม่วง','ชมพู'],th:'เสริมความมีเสน่ห์และเป็นที่สนใจ',en:'Magnetic personality — you become the center of attention.'},
-     career:{c:['ม่วง','ชมพู'],th:'เสริมอำนาจและความเป็นผู้นำ',en:'Enhances authority and leadership at work.'},
-     protection:{c:['น้ำตาล','ดำ'],th:'ปกป้องจากสิ่งไม่ดีและให้ความมั่นคง',en:'Grounds and protects against instability and evil.'},
-     avoid:{th:'เหลือง',en:'Yellow',hex:'#D4AC0D'}}
+  // อาทิตย์ Sunday — career:ชมพู, money:ดำ, luck:เขียว, social:เทา, avoid:น้ำเงิน
+  0:{career:{c:['ชมพู','เทา'],th:'ปี 2569 — ชมพูเสริมการงานและทำให้ได้รับการสนับสนุน',en:'2026 — pink brings career support and positive recognition.'},
+     money:{c:['ดำ','เขียว'],th:'ปี 2569 — ดำเสริมความมั่งคั่งและทรัพย์สะสม',en:'2026 — black attracts lasting wealth and financial power.'},
+     love:{c:['เขียว','ชมพู'],th:'ปี 2569 — เขียวเสริมความสดชื่นและโชคความรัก',en:'2026 — green brings fresh energy and romantic luck.'},
+     senior:{c:['เทา','ชมพู'],th:'ปี 2569 — เทาเสริมเมตตาและให้ผู้ใหญ่ประทับใจ',en:'2026 — gray projects dignity and earns senior respect.'},
+     social:{c:['เทา','ชมพู'],th:'ปี 2569 — เทาเสริมเมตตามหานิยมอย่างละเอียดอ่อน',en:'2026 — gray radiates quiet, refined social charm.'},
+     health:{c:['ชมพู','เขียว'],th:'ปี 2569 — ชมพูเสริมสุขภาพและความสดใสของร่างกาย',en:'2026 — pink brightens health and physical vitality.'},
+     protection:{c:['ดำ','เทา'],th:'ปี 2569 — ดำปกป้องจากสิ่งร้ายและพลังงานลบ',en:'2026 — black powerfully shields against evil and negativity.'},
+     avoid:{th:'น้ำเงิน',en:'Navy Blue',hex:'#2858A8'}}
 };
 
 // ── TODAY COLORS ───────────────────────────────
@@ -751,25 +759,41 @@ function saveImage(){
   ctx.fillText('สีเสื้อมงคล Generator', W-50, H-32);
 
   // ── Export ────────────────────────────────────────
-  try{
-    cvs.toBlob(blob=>{
+  cvs.toBlob(async blob=>{
+    const fileName=`mongkol-สี${r.bestName}-${Date.now()}.png`;
+
+    // iOS Safari: use Web Share API with file if available
+    if(navigator.canShare && navigator.canShare({files:[new File([blob],fileName,{type:'image/png'})]})){
+      try{
+        await navigator.share({
+          files:[new File([blob],fileName,{type:'image/png'})],
+          title:'สีเสื้อมงคล · Lucky Color'
+        });
+        btn.textContent='✅ แชร์แล้ว / Shared!';
+        btn.disabled=false;
+        setTimeout(()=>{btn.textContent='🖼️ บันทึกรูปภาพ · Save Image';},2500);
+        return;
+      }catch(e){/* user cancelled or error, fall through */}
+    }
+
+    // Android / Desktop: direct download
+    try{
       const url=URL.createObjectURL(blob);
       const a=document.createElement('a');
-      a.href=url;
-      a.download=`mongkol-สี${r.bestName}-${Date.now()}.png`;
-      a.click();
+      a.href=url; a.download=fileName; a.click();
       URL.revokeObjectURL(url);
       btn.textContent='✅ บันทึกแล้ว! / Saved!';
       btn.disabled=false;
       setTimeout(()=>{btn.textContent='🖼️ บันทึกรูปภาพ · Save Image';},2500);
-    },'image/png');
-  }catch(e){
-    // iOS Safari fallback — open in new tab
-    const url=cvs.toDataURL('image/png');
-    window.open(url,'_blank');
-    btn.textContent='🖼️ บันทึกรูปภาพ · Save Image';
-    btn.disabled=false;
-  }
+    }catch(e){
+      // Last resort: open image in new tab — user long-press saves on iOS
+      const url=cvs.toDataURL('image/png');
+      window.open(url,'_blank');
+      alert('กดค้างที่รูปแล้วเลือก "บันทึกรูปภาพ" / Long-press the image and tap "Save to Photos"');
+      btn.textContent='🖼️ บันทึกรูปภาพ · Save Image';
+      btn.disabled=false;
+    }
+  },'image/png');
 }
 
 function roundRect(ctx,x,y,w,h,r){
